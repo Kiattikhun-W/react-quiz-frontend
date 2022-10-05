@@ -4,6 +4,7 @@ import TopicList from "./components/Topic/TopicList.jsx";
 
 import {createBrowserRouter, Outlet, RouterProvider,} from "react-router-dom";
 import TopicCover from "./components/Topic/TopicCover.jsx";
+import Assessment from "./components/Assessment/Assessment.jsx";
 
 const Layout = () => {
     return (
@@ -31,6 +32,11 @@ function App() {
         {
             path: "/assessment/:topicId",
             element: <TopicCover/>,
+
+        },
+        {
+            path: "/assessment/:topicId/session",
+            element: <Assessment/>,
 
         },
 

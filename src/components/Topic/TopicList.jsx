@@ -25,8 +25,8 @@ const TopicList = () => {
             <div className={'grid place-content-center   '}>
                 {data.map(({id, topic_name}) => {
                     return (
-                        <Link to={`/assessment/${id}`}>
-                            <CardTopicList key={id} name={topic_name} id/>
+                        <Link key={id} to={`/assessment/${id}`}>
+                            <CardTopicList name={topic_name} id/>
                         </Link>
                     )
                 })}
