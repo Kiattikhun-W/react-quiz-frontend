@@ -1,6 +1,8 @@
 import {Link, useLocation, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import axios from "axios";
+import {useQuery} from "@tanstack/react-query";
+import * as api from "../Api/topicApi.js";
 
 const beforeTest = [
     {id: 1, text: '- คุณสามารถทำแบบทดสอบนี้บนอุปกรณ์มือถือ อย่างไรก็ตาม เราขอแนะนำให้คุณทำบนคอมพิวเตอร์'},
@@ -10,27 +12,25 @@ const beforeTest = [
 
 const TopicCover = () => {
     let {topicId} = useParams();
-
     const [topicName, setTopicName] = useState('')
     const [subTopics, setSubTopics] = useState([])
-
-    const _fetchData = async () => {
-        try {
-            const topicData = await axios.get(`http://localhost:3000/assessment/${topicId}`)
-
-            const {topic_name, subtopics} = topicData?.data[0]
-            setSubTopics(subtopics)
-            setTopicName(topic_name)
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+    } = useQuery(['topic', topicId], () => api.getTopic(topicId))
 
 
-        } catch (e) {
-            console.log(e)
-        }
-    }
     useEffect(() => {
-        _fetchData()
-
-    }, [])
+        if (data) {
+            const {topic_name, subtopics} = data?.data[0];
+            setTopicName(topic_name);
+            setSubTopics(subtopics);
+        }
+    }, [data])
+    if (isLoading) return <p className={'text-4xl text-white text-center'}>Loading</p>
+    if (isError) return <p className={'text-4xl text-white text-center'}> no data found</p>
 
     return (
         <div className={' grid place-content-center '}>

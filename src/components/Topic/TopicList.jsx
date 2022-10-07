@@ -1,29 +1,18 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
 import CardTopicList from "./CardTopicList.jsx";
 import {Link} from "react-router-dom";
+import {useQuery} from "@tanstack/react-query";
+import * as api from '../Api/topicApi.js'
 
 const TopicList = () => {
-    const [data, setData] = useState([])
+    const {data, isLoading, isError, error} = useQuery(['topics'], api.getTopics)
+    if (isLoading) return <p className={'text-4xl text-white text-center'}>Loading</p>
+    if (isError) return <p className={'text-4xl text-white text-center'}> no data found</p>
 
 
-    const _fetchData = async () => {
-        try {
-            const topicData = await axios.get('http://localhost:3000/topic')
-
-            setData(topicData.data)
-
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    useEffect(() => {
-        _fetchData()
-    }, [])
     return (
         <div>
             <div className={'grid place-content-center   '}>
-                {data.map(({id, topic_name}) => {
+                {data?.map(({id, topic_name}) => {
                     return (
                         <Link key={id} to={`/assessment/${id}`}>
                             <CardTopicList name={topic_name} id/>
