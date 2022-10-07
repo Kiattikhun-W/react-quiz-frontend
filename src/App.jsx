@@ -5,6 +5,7 @@ import TopicList from "./components/Topic/TopicList.jsx";
 import {createBrowserRouter, Outlet, RouterProvider,} from "react-router-dom";
 import TopicCover from "./components/Topic/TopicCover.jsx";
 import Assessment from "./components/Assessment/Assessment.jsx";
+import SummaryScore from "./components/Page/SummaryScore.jsx";
 
 const Layout = () => {
     return (
@@ -37,6 +38,11 @@ function App() {
         {
             path: "/assessment/:topicId/session",
             element: <Assessment/>,
+
+        },
+        {
+            path: "/summary",
+            element: <SummaryScore/>,
 
         },
 

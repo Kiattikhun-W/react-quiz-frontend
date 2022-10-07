@@ -17,13 +17,19 @@ const Assessment = () => {
         isError,
         error
     } = useQuery(['assessment', topicId, page], () => getAssessment(topicId, page))
-
-    const {mutate} = useMutation(checkAssessment)
-
     const ansRef = useRef(null)
 
     const [answers, setAnswers] = useState([])
     const navigate = useNavigate();
+
+    const {mutate, isSuccess} = useMutation(checkAssessment, {
+        onSuccess: (scoreData) => {
+            console.log("success", scoreData)
+            navigate('/summary', {
+                state: scoreData,
+            })
+        }
+    })
 
 
     //
