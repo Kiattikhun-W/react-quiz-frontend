@@ -9,6 +9,7 @@ const SummaryScore = () => {
         if (!state) {
             return navigate(`/`)
         }
+        console.log(state)
 
 
         return () => {
@@ -20,10 +21,10 @@ const SummaryScore = () => {
             <div className={'card mx-2 lg:mx-0 rounded-3xl mt-24 mb-2 p-[64px]'}>
                 <div>
                     <h1 className={'text-4xl text-center font-extrabold '}>
-                        คะแนนของคุณคือ !?!
+                        คะแนนสอบเรื่อง {state?.topicData?.topic_name} ของคุณคือ !?!
                     </h1>
                     <h1 className={'text-4xl text-center text-red-300 font-extrabold'}>
-                        {state?.score}
+                        {state?.score} คะแนน
                     </h1>
                 </div>
 
