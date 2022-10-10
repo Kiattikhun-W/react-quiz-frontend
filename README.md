@@ -1,5 +1,6 @@
 # react-quiz-frontend
 
+However, this project is under development.
 
 
 ![image](https://user-images.githubusercontent.com/108406986/194864673-88926479-2adb-43be-99bc-bb5a0bd587bc.png)
