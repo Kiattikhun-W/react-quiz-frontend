@@ -5,6 +5,7 @@ import AssessmentChoice from "./AssessmentChoice.jsx";
 import Swal from "sweetalert2";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {getAssessment, checkAssessment} from "../Api/assessmentApi.js"
+import Loading from "../Base/Loading.jsx";
 
 const Assessment = () => {
     let {topicId} = useParams();
@@ -24,7 +25,7 @@ const Assessment = () => {
 
     const {mutate, isSuccess} = useMutation(checkAssessment, {
         onSuccess: (scoreData) => {
-            console.log("success", scoreData)
+
             navigate('/summary', {
                 state: scoreData,
             })
@@ -52,7 +53,7 @@ const Assessment = () => {
 
     }, [answers])
 
-    if (isLoading) return <p className={'text-4xl text-white text-center'}>Loading</p>
+    if (isLoading) return <Loading/>
     if (isError) return <p className={'text-4xl text-white text-center'}> no data found</p>
 
     const _validate = async () => {

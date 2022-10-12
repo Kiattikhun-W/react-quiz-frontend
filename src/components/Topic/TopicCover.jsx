@@ -3,6 +3,7 @@ import {useEffect, useState, useRef} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import * as api from "../Api/topicApi.js";
+import Loading from "../Base/Loading.jsx";
 
 const beforeTest = [
     {id: 1, text: '- คุณสามารถทำแบบทดสอบนี้บนอุปกรณ์มือถือ อย่างไรก็ตาม เราขอแนะนำให้คุณทำบนคอมพิวเตอร์'},
@@ -29,7 +30,7 @@ const TopicCover = () => {
             setSubTopics(subtopics);
         }
     }, [data])
-    if (isLoading) return <p className={'text-4xl text-white text-center'}>Loading</p>
+    if (isLoading) return <Loading/>
     if (isError) return <p className={'text-4xl text-white text-center'}> no data found</p>
 
     return (
