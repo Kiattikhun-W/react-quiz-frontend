@@ -1,8 +1,10 @@
 const CardTopicList = ({name, id}) => {
     return (
-        <div
-            className={'bg-gradient-to-l from-purple-400 to-pink-600 md:px-20 px-6 py-2 md:py-5 mt-5 rounded-full  hover:bg-gradient-to-r hover:cursor-pointer hover:scale-110'}>
-            <p className={' text-2xl text-white text-center'}>{name}</p>
+        <div>
+            <div
+                className="flex items-center mt-2  justify-center px-5 py-3 text-base font-medium leading-6 text-black whitespace-no-wrap bg-white border-2 border-transparent rounded-full shadow-sm hover:bg-transparent hover:text-white hover:border-white focus:outline-none">
+                {name}
+            </div>
         </div>
     )
 }

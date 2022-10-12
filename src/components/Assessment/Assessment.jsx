@@ -91,7 +91,7 @@ const Assessment = () => {
     return (
         <div className={'container  mx-auto min-h-screen '}>
             <div className={'grid place-items-center  mx-2'}>
-                <div className={'card   w-full lg:w-2/4 lg:mx-0  mt-28 mb-2 '}>
+                <div className={'card   w-full lg:w-2/4 lg:mx-0  mt-28 mb-2 font-sarabun'}>
                     <div className={'my-2'}>
                         <h1 className={'text-2xl font-extrabold '}>Question {page}</h1>
                         <h1 className={'text-left'}>{data?.result[0]?.question_name}</h1>

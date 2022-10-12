@@ -6,6 +6,7 @@ import {createBrowserRouter, Outlet, RouterProvider,} from "react-router-dom";
 import TopicCover from "./components/Topic/TopicCover.jsx";
 import Assessment from "./components/Assessment/Assessment.jsx";
 import SummaryScore from "./components/Page/SummaryScore.jsx";
+import ErrorPage from "./components/Page/ErrorPage.jsx";
 
 const Layout = () => {
     return (
@@ -44,6 +45,10 @@ function App() {
             path: "/summary",
             element: <SummaryScore/>,
 
+        },
+        {
+            path: "*",
+            element: <ErrorPage/>
         },
 
     ]);

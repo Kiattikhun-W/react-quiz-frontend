@@ -34,7 +34,7 @@ const TopicCover = () => {
 
     return (
         <div className={' grid place-content-center '}>
-            <div className={'card mx-2 lg:mx-0 rounded-3xl mt-24 mb-2 p-[64px]'}>
+            <div className={'card mx-2 lg:mx-0 rounded-3xl mt-24 mb-2 p-[64px] font-sarabun'}>
                 <div>
                     <h1 className={'text-4xl text-center font-extrabold '}>
                         {topicName}

@@ -15,8 +15,9 @@ const TopicList = () => {
                 {data?.map(({id, topic_name}) => {
                     return (
                         <Link key={id} to={`/assessment/${id}`}>
-                            <CardTopicList name={topic_name} id/>
+                            <CardTopicList name={topic_name}/>
                         </Link>
+
                     )
                 })}
             </div>
