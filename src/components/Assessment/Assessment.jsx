@@ -7,6 +7,7 @@ import {checkAssessment, getAssessment} from "../Api/assessmentApi.js"
 import Loading from "../Base/Loading.jsx";
 import {getMinuteFromSeconds} from "../utils/index.js";
 import ProgressBar from "@ramonak/react-progress-bar";
+import HeaderBar from "../Api/components/HeaderBar.jsx";
 
 const Assessment = () => {
     let {topicId} = useParams();
@@ -84,7 +85,7 @@ const Assessment = () => {
     }, [isDone]);
 
 
-    if (isLoading) return <Loading/>
+    // if (isLoading) return <Loading/>
     if (isError) return <p className={'text-4xl text-white text-center'}> no data found</p>
 
     const _validate = () => {
@@ -124,41 +125,24 @@ const Assessment = () => {
         <div className={'container  mx-auto min-h-screen '}>
             <div className={'grid place-items-center  mx-2'}>
                 <div className={'card   w-full lg:w-2/4 lg:mx-0  mt-28 mb-2 font-sarabun'}>
-                    <div className={'my-2'}>
-                        <div className={'flex justify-between'}>
-                            <div>
-                                <h1 className={'text-2xl'}>
-                                    {topicNameRef.current}
-                                </h1>
-                            </div>
-                            {/*<hr className="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700"/>*/}
-                            <div>
-                                <h1 className={'font-bold text-2xl'}>
-                                    {getMinuteFromSeconds(time)}
-                                </h1>
-                            </div>
-                        </div>
-                        <div>
-                            <ProgressBar
-                                maxCompleted={data?.count}
-                                completed={progressBarRef.current}
-                                animateOnRender
-                                bgColor="#8d8d8d"
-                                isLabelVisible={false}
-                            />
-                        </div>
-                        <h1 className={'text-2xl font-extrabold '}>Question {page}</h1>
-                        <h1 className={'text-left'}>{data?.result[0]?.question_name}</h1>
-                    </div>
+                    <HeaderBar
+                        topicName={topicNameRef.current}
+                        dataCount={data?.count}
+                        time={time}
+                        progressBarNum={progressBarRef.current}
+                        page={page}
+                        questionName={data?.result[0]?.question_name}
+                    />
+
                     <div className={'mb-2'}>
-                        {data?.result[0]?.choices?.map(({choiceId, choice_desc}) => (
-                                <AssessmentChoice key={choiceId} ref={ansRef}
-                                                  onChange={_onChange}
-                                                  choiceId={choiceId}
-                                                  choice_desc={choice_desc}/>
-                            )
-                        )
-                        }
+                        {
+                            data?.result[0]?.choices?.map(({choiceId, choice_desc}) => (
+                                    <AssessmentChoice key={choiceId} ref={ansRef}
+                                                      onChange={_onChange}
+                                                      choiceId={choiceId}
+                                                      choice_desc={choice_desc}/>
+                                )
+                            )}
                     </div>
                     <div>
                         {
