@@ -6,12 +6,15 @@ import Swal from "sweetalert2";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {getAssessment, checkAssessment} from "../Api/assessmentApi.js"
 import Loading from "../Base/Loading.jsx";
+import {getMinuteFromSeconds} from "../utils/index.js";
 
 const Assessment = () => {
     let {topicId} = useParams();
     let state = useLocation().state
-    const [page, setPage] = useState(1)
 
+    const [page, setPage] = useState(1)
+    const [time, setTime] = useState(900)
+    const [isDone, setIsDone] = useState(false)
     const {
         data,
         isLoading,
@@ -43,6 +46,7 @@ const Assessment = () => {
         ansRef.current = null
         return () => {
             window.history.replaceState({}, document.title);
+
         }
     }, [page,])
 
@@ -53,12 +57,33 @@ const Assessment = () => {
 
     }, [answers])
 
+    useEffect(() => {
+        const initialTime = Date.now();
+        if (!isDone) {
+            const intervalId = setInterval(() => {
+                const currentTime = Date.now();
+                const elapsedTime = Math.floor((currentTime - initialTime) / 1000);
+                const remainingTime = time - elapsedTime;
+                if (remainingTime <= 0) {
+                    setTime(0);
+                    clearInterval(intervalId);
+                } else {
+                    setTime(remainingTime);
+                }
+            }, 1000);
+            return () => {
+                clearInterval(intervalId);
+            };
+        }
+    }, [isDone]);
+
+
     if (isLoading) return <Loading/>
     if (isError) return <p className={'text-4xl text-white text-center'}> no data found</p>
 
-    const _validate = async () => {
+    const _validate = () => {
         if (!ansRef.current) {
-            await Swal.fire({
+            Swal.fire({
                 icon: 'warning',
                 title: 'โปรดตอบคำถาม',
                 text: 'เลือกคำตอบ!',
@@ -72,7 +97,7 @@ const Assessment = () => {
 
     const _onNext = async () => {
         //sweet alert doing
-        if (await _validate()) {
+        if (_validate()) {
             setAnswers((prevState) => [...prevState, ansRef.current])
             setPage(prevCount => prevCount + 1)
         }
@@ -82,18 +107,32 @@ const Assessment = () => {
         ansRef.current = e.target.value
     }
     const _onSubmit = async () => {
-        if (await _validate()) {
+        if (_validate()) {
             setAnswers((prevState) => [...prevState, ansRef.current])
         }
 
 
     }
-
     return (
         <div className={'container  mx-auto min-h-screen '}>
             <div className={'grid place-items-center  mx-2'}>
                 <div className={'card   w-full lg:w-2/4 lg:mx-0  mt-28 mb-2 font-sarabun'}>
                     <div className={'my-2'}>
+                        <div className={'flex justify-between'}>
+                            <div>
+                                <h1 className={'text-2xl'}>
+                                    {/*{topicName}*/}
+                                </h1>
+                            </div>
+                            <hr className="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700"/>
+                            <div>
+                                <h1 className={'font-bold text-2xl'}>
+                                    {getMinuteFromSeconds(time)}
+                                </h1>
+
+                            </div>
+
+                        </div>
                         <h1 className={'text-2xl font-extrabold '}>Question {page}</h1>
                         <h1 className={'text-left'}>{data?.result[0]?.question_name}</h1>
                     </div>
