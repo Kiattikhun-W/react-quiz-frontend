@@ -1,19 +1,19 @@
-import axios from "axios";
 import {useEffect, useRef, useState} from "react";
-import {useLocation, useParams, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import AssessmentChoice from "./AssessmentChoice.jsx";
 import Swal from "sweetalert2";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {getAssessment, checkAssessment} from "../Api/assessmentApi.js"
+import {checkAssessment, getAssessment} from "../Api/assessmentApi.js"
 import Loading from "../Base/Loading.jsx";
 import {getMinuteFromSeconds} from "../utils/index.js";
+import ProgressBar from "@ramonak/react-progress-bar";
 
 const Assessment = () => {
     let {topicId} = useParams();
     let state = useLocation().state
-
+    let progressBarRef = useRef(1)
     const [page, setPage] = useState(1)
-    const [time, setTime] = useState(900)
+    const [time, setTime] = useState(5)
     const [isDone, setIsDone] = useState(false)
     const {
         data,
@@ -21,7 +21,9 @@ const Assessment = () => {
         isError,
         error
     } = useQuery(['assessment', topicId, page], () => getAssessment(topicId, page))
+
     const ansRef = useRef(null)
+    const topicNameRef = useRef(state?.topicName)
 
     const [answers, setAnswers] = useState([])
     const navigate = useNavigate();
@@ -38,24 +40,28 @@ const Assessment = () => {
 
     //
     useEffect(() => {
-        if (!state) {
+        let entryMode = state?.entryMode ?? false
+        if (!entryMode) {
             return navigate(`/assessment/${topicId}`)
         }
 
 
         ansRef.current = null
         return () => {
-            window.history.replaceState({}, document.title);
-
+            window.history.replaceState({}, document.title)
         }
     }, [page,])
 
     useEffect(() => {
+        if (time === 0) {
+            mutate({topicId, answers})
+        }
+
         if (answers.length === data?.count) {
             mutate({topicId, answers})
         }
 
-    }, [answers])
+    }, [answers, time])
 
     useEffect(() => {
         const initialTime = Date.now();
@@ -100,6 +106,7 @@ const Assessment = () => {
         if (_validate()) {
             setAnswers((prevState) => [...prevState, ansRef.current])
             setPage(prevCount => prevCount + 1)
+            progressBarRef.current++
         }
     }
 
@@ -121,17 +128,24 @@ const Assessment = () => {
                         <div className={'flex justify-between'}>
                             <div>
                                 <h1 className={'text-2xl'}>
-                                    {/*{topicName}*/}
+                                    {topicNameRef.current}
                                 </h1>
                             </div>
-                            <hr className="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700"/>
+                            {/*<hr className="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700"/>*/}
                             <div>
                                 <h1 className={'font-bold text-2xl'}>
                                     {getMinuteFromSeconds(time)}
                                 </h1>
-
                             </div>
-
+                        </div>
+                        <div>
+                            <ProgressBar
+                                maxCompleted={data?.count}
+                                completed={progressBarRef.current}
+                                animateOnRender
+                                bgColor="#8d8d8d"
+                                isLabelVisible={false}
+                            />
                         </div>
                         <h1 className={'text-2xl font-extrabold '}>Question {page}</h1>
                         <h1 className={'text-left'}>{data?.result[0]?.question_name}</h1>

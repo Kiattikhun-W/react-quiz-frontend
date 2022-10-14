@@ -59,7 +59,11 @@ const TopicCover = () => {
                     </p>
                 </div>
                 <div className={'text-center mt-4 '}>
-                    <Link to={`/assessment/${topicId}/session`} state={true}>
+                    <Link
+                        to={`/assessment/${topicId}/session`}
+                        // state={true}
+                        state={{entryMode: true, topicName}}
+                    >
                         <button
                             className="bg-yellow-500  hover:bg-yellow-700 text-white text-md font-bold py-3 px-9 rounded-full">
                             เริ่มทำแบบทดสอบ
